@@ -14,10 +14,10 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle('Chat Room API')
-    .setDescription('The Chat Room API description')
+    .setTitle('Bookshop API')
+    .setDescription('The Bookshop API description')
     .setVersion('1.0')
-    .addTag('chat-room')
+    .addTag('Bookshop')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
