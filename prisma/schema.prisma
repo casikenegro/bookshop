@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int           @id @default(autoincrement())
+  email     String        @unique
+  password  String?
+  location  String?
+  age       Int?
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  deletedAt DateTime?     @map("deleted_at")
+  books     BooksRating[]
+
+  @@map("users")
+}
+
+model Book {
+  id              String        @id
+  title           String?
+  author          String?
+  yearPublication Int?          @map("year_publication")
+  location        String?
+  publisher       String?
+  imageUrlS       String?       @map("image_url_s")
+  imageUrlM       String?       @map("image_url_m")
+  imageUrlL       String?       @map("image_url_l")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  deletedAt       DateTime?
+  users           BooksRating[]
+
+  @@map("books")
+}
+
+model BooksRating {
+  rating    Int?
+  userId    Int       @map("user_id")
+  bookId    String       @map("book_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@id([userId, bookId])
+  @@map("books_ratings")
+}
